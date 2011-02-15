@@ -1,0 +1,507 @@
+% \iffalse meta-comment
+% !TEX program  = pdfLaTeX
+%<*internal>
+\iffalse
+%</internal>
+%<*readme>
+----------------------------------------------------------------
+The NGE Lesson Bundle
+E-mail: leingang@courant.nyu.edu
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+
+Some text about the package: probably the same as the abstract.
+%</readme>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+----------------------------------------------------------------
+The NGE Lesson Bundle
+E-mail: leingang@courant.nyu.edu
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+
+\endpreamble
+\postamble
+
+Copyright (C) 2011 by Matthew Leingang <leingang@courant.nyu.edu>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+You.
+
+This work consists of the file  ngelesson.dtx
+and the derived files           ngelesson.ins,
+                                ngelesson.pdf,
+                                ngelessonslides.cls,
+                                ngelessonhandout.cls,
+                                ngelessonplan.cls, and
+                                ngelessonworksheet.cls
+
+\endpostamble
+\usedir{tex/latex/ngelesson}
+\generate{
+  \file{\jobname slides.cls}{\from{\jobname.dtx}{classes,slides}}
+  \file{\jobname handout.cls}{\from{\jobname.dtx}{classes,handout}}
+  \file{\jobname plan.cls}{\from{\jobname.dtx}{classes,plan}}
+  \file{\jobname worksheet.cls}{\from{\jobname.dtx}{classes,worksheet}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/ngelesson}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\nopreamble\nopostamble
+\usedir{doc/latex/ngelesson}
+\generate{
+  \file{README.txt}{\from{\jobname.dtx}{readme}}
+}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+%<*classes>
+\NeedsTeXFormat{LaTeX2e}
+%<classes>\ProvidesClass
+%<slides>{ngelessonslides}
+%<handout>{ngelessonhandout}
+%<plan>{ngelessonplan}
+%<worksheet>{ngelessonworksheet}
+%<classes>[2011/01/30 v0.1 MPL]
+%</classes>
+%<*driver>
+\documentclass{ltxdoc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+%\RequirePackage{\jobname}
+\RequirePackage[numbered]{hypdoc}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\newcommand{\cls}[1]{\textsf{#1}}
+\newcommand{\pkg}[1]{\textsf{#1}}
+\begin{document}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+% 
+%\GetFileInfo{\jobname slides.cls}
+%
+%\title{^^A
+%  The \textsf{ngelesson} bundle\thanks{^^A
+%    This file describes version \fileversion, last revised \filedate.^^A
+%  }^^A
+%}
+%\author{^^A
+%  You\thanks{E-mail: you@your.domain}^^A
+%}
+%\date{Released \filedate}
+%
+%\maketitle
+%
+%%\changes{v1.0}{2009/10/06}{First public release}
+%
+% \part*{Interface}
+%
+%\StopEventually{^^A
+%  \PrintChanges
+%  \PrintIndex
+%}
+% \part*{Implementation}
+%
+%    \begin{macrocode}
+%<*classes>
+%    \end{macrocode}
+%
+% \section{Requirements}
+%    \begin{macrocode}
+\RequirePackage{cancel}
+\RequirePackage{clock}\ClockFrametrue
+\RequirePackage{graphicx}
+\RequirePackage{enumerate}
+\RequirePackage{epstopdf}
+\RequirePackage{leintex2e}
+\RequirePackage{nicefrac}
+\RequirePackage{pdfpages}
+\RequirePackage{snapshot}
+%\RequirePackage{txtunits}
+\RequirePackage{units}
+\RequirePackage{verbatim}
+\RequirePackage{array}
+\RequirePackage{tikz}
+\RequirePackage{url}
+%<plan>\PassOptionsToPackage{override}{xcolor}
+%    \end{macrocode}
+%
+% \section{Class Options}
+% 
+% \begin{macro}{bigmath}
+% Set all math in display style, so fractions are bigger.  This is the ngelesson default
+%    \begin{macrocode}
+\DeclareOption{bigmath}{
+    \everymath\expandafter{\the\everymath\displaystyle}
+}
+\ExecuteOptions{bigmath}
+%    \end{macrocode}
+% \end{macro}
+% Set all (inline) math as text style, which is the normal way.
+% \begin{macro}{nobigmath}
+%    \begin{macrocode}
+\DeclareOption{nobigmath}{
+    \everymath\expandafter{\the\everymath\textstyle}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{solutions}
+% In worksheet mode, the solutions option turns on the display of solutions.  
+% This option is not present in the other classes.
+%    \begin{macrocode}
+%<*worksheet>
+\newboolean{worksheetsolutions}
+\setboolean{worksheetsolutions}{false}
+\DeclareOption{solutions}{
+    \setboolean{worksheetsolutions}{true}    
+}
+%</worksheet>
+%    \end{macrocode}
+% \end{macro}
+%
+% Default: pass to base class
+%    \begin{macrocode}
+\newcommand\ngelesson@baseclass
+%<slides|handout>{beamer}
+%<plan|worksheet>{article}
+%    \begin{macrocode}
+\DeclareOption*{% 
+	\PassOptionsToClass{\CurrentOption}{\ngelesson@baseclass}%
+}
+\ProcessOptions\relax
+%    \end{macrocode}
+%
+% \section{The base class}
+% 
+% 
+%    \begin{macrocode}
+%<handout>\PassOptionsToClass{handout}{beamer}
+\LoadClass{\ngelesson@baseclass}
+%<plan>\RequirePackage{beamerarticle}
+%    \end{macrocode}
+%
+% \section{Declarations}
+% \subsection{Key Management}
+%    \begin{macrocode}
+\newcommand{\ngelset}[1]{%
+	\pgfqkeys{/nge lesson}{#1}
+}
+%    \end{macrocode}
+%
+% \subsection{Metadata}
+%
+% \begin{macro}{title}
+% options
+% - short title
+% - lesson number
+% - textbook section
+% 
+%    \begin{macrocode}
+\ngelset{
+  short title/.store in      = \ngelesson@shorttitle,
+  long title/.store in       = \ngelesson@longtitle,
+  lesson number/.store in    = \ngelesson@lessonnumber,
+  textbook section/.store in = \ngelesson@textbooksection
+}
+\renewcommand{\title}[2][]{
+    \ngelset{short title=#2,long title=#2}
+%:TODO: - no key=short title
+%    \ngelset{.unknown/.style={short title=\pgfkeyscurrentname}}
+    \ngelset{#1}
+%    \end{macrocode}
+%  Beamer stores its long- and short-form titles in macros
+% \verb|\inserttitle| and \verb|\beamer@shorttitle|, respectively.
+%
+%    \begin{macrocode}  
+    \def\inserttitle{%
+        \ifx\ngelesson@textbooksection\@empty%
+        \else%
+          Section \ngelesson@textbooksection \\
+        \fi%
+          #2%
+    }
+    \def\beamer@shorttitle{%
+        \ifx\ngelesson@textbooksection\@empty%
+        \else%
+          Section \ngelesson@textbooksection: %
+        \fi%
+          \ngelesson@shorttitle%    
+    } 
+%    \end{macrocode}
+% The lesson plan, being derived from \cls{article}, needs to set the macro \verb|\@title|.       
+%    \begin{macrocode}
+%<plan>\let\@title\inserttitle
+%    \end{macrocode}
+% The worksheet is also derived from \cls{article}, but we add the words ``Worksheet from'' first.
+%    \begin{macrocode}
+%<worksheet>\def\@title{Worksheet for \inserttitle}
+%    \end{macrocode}
+% End of the \verb|\title| macro.
+%    \begin{macrocode}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{course}
+% Set the name and other properties of the course that the lesson belongs to.
+% Optional keys:
+% \begin{description}
+% \item[code] A machine-like code for the course (e.g., ``Math 1a'' or ``V63.0121'')
+% \item[section] A code for the section of the course
+% \end{description}
+%    \begin{macrocode}
+\let\insertcoursename\@empty
+\let\ngelesson@course@code\@empty
+\let\insertcoursesectionnumber\@empty
+\ngelset{
+    course/.cd,
+    code/.store in=\ngelesson@course@code,
+    section/.store in=\insertcoursesectionnumber,
+    name/.store in=\insertcoursename
+}
+\newcommand{\course}[2][]{
+    \ngelset{course/.cd,#1,name=#2}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{term}
+% Set the term of the course that the lesson belongs to.
+% Optional keys:
+% \begin{description}
+%  \item[code] A machine-like code for the term.
+% \end{description}
+%    \begin{macrocode}
+\let\ngelesson@term\@empty
+\let\netlesson@term@code\@empty
+\ngelset{term/.cd,
+    name/.store in=\ngelesson@term,
+    code/.store in=\ngelesson@term@code
+}
+\newcommand{\term}[2][]{
+    \ngelset{term/.cd,#1,name=#2}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\author}
+% Set the author name.  The course is prepended automatically.
+%    \begin{macrocode}
+\def\author{\@dblarg\beamer@author}
+\long\def\beamer@author[#1]#2{%
+    % append course name/code/section
+    \def\ngelesson@authorprefix{
+        \ifx\ngelesson@course@code\@empty%
+        \else%
+            \ngelesson@course@code%
+            \ifx\insertcoursesectionnumber\@empty%
+            \else%
+                .\insertcoursesectionnumber
+            \fi%
+        \fi:
+        \insertcoursename%    
+    }
+    \def\beamer@shortauthor{\ngelesson@authorprefix}
+    \def\insertauthor{\def\inst{\beamer@insttitle}\def\and{\beamer@andtitle}\ngelesson@authorprefix \\ #2}%
+%    \end{macrocode}
+% In the beamer modes this adds metadata to the PDF
+%    \begin{macrocode}
+%<*slides|handout>    
+    \ifbeamer@autopdfinfo%
+        \def\beamer@andstripped{}%
+        \beamer@stripands#2 \and\relax
+        {\let\inst=\@gobble\let\thanks=\@gobble\def\and{, }\hypersetup{pdfauthor={\beamer@andstripped}}}
+    \fi%
+%</slides|handout>    
+%    \end{macrocode}
+% The lesson plan, being derived from \cls{article}, needs to set the macro \verb|\@author|.       
+%    \begin{macrocode}
+%<*plan>
+    \let\@author\insertauthor
+%</plan>
+%    \end{macrocode}
+% The worksheet is also derived from \cls{article} but just needs the course name.
+%    \begin{macrocode}
+%<*worksheet>
+    \let\@author\beamer@shortauthor
+%</worksheet>
+%    \end{macrocode}
+% End of the \verb|\author| macro.
+%    \begin{macrocode}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\institute}
+% Set the institute.  The optional argument sets the shortened form.
+% 
+% This is already implemented in \cls{beamer} and \pkg{beamerarticle} so we only need to copy
+% it in for the worksheet class.  In fact, it's a straight-up copy.
+%    \begin{macrocode}
+%<*worksheet>
+\def\institute{\@dblarg\beamer@institute}
+\long\def\beamer@institute[#1]#2{%
+  \def\beamer@temp{#2}%
+  \ifx\beamer@temp\@empty
+    \def\insertinstitute{}
+  \else
+    \def\insertinstitute{\def\inst{\beamer@instinst}\def\and{\beamer@andinst}#2}%
+  \fi
+ \def\beamer@shortinstitute{#1}}
+\institute{}
+
+\def\beamer@instinst#1{{\donotcoloroutermaths$^{#1}$}\ignorespaces}
+\def\beamer@andinst{\\[1em]}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\insertshortinstitute}
+% Insert the shortened institute name.
+%    \begin{macrocode}
+\newcommand\insertshortinstitute[1][]{%
+  {%
+    \let\thanks=\@gobble%
+    \def\inst{\beamer@instother}\def\and{\beamer@andother}%
+    \beamer@setupshort{#1}%
+    \beamer@insertshort{\beamer@shortinstitute}%
+  }}
+%</worksheet>
+%    \end{macrocode}
+% \end{macro}
+%
+% \section{Markup}
+%
+% \begin{macro}{defined}
+%    \begin{macrocode}
+\def\defined#1{\structure{\textbf{#1}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Title Page}
+% Nothing here is needed yet.
+%
+% \subsection{Theorem-like environments}
+%
+% \begin{environment}{answer}
+%    \begin{macrocode}
+\newenvironment{answer}{\begin{block}{Answer}}{\end{block}}
+%    \end{macrocode}
+% \end{environment}
+
+% \begin{environment}{question}
+%    \begin{macrocode}
+\newenvironment{question}{\begin{block}{Question}}{\end{block}}
+%    \end{macrocode}
+% \end{environment}
+%
+% \section{Handout layout}
+%
+%    \begin{macrocode}
+%<*handout>
+\RequirePackage{ngelessonlayouts}
+%    \end{macrocode}
+% Another XeTeX hack to get around a bug with pgfpages.
+% See \url{http://tex.stackexchange.com/q/3036/1402}
+%    \begin{macrocode}
+\renewcommand\pgfsetupphysicalpagesizes{%
+    \pdfpagewidth\pgfphysicalwidth\pdfpageheight\pgfphysicalheight%
+}
+\pgfpagesuselayout{3 on 1 with notes}[letterpaper]
+%</handout>
+%    \end{macrocode}
+%
+% \section{Lesson Plan}
+%
+% We use beamer's article mode.
+%    \begin{macrocode}
+\newcommand{\timecheck}[1]{}
+%<*plan>
+\renewcommand{\timecheck}[1]{\mode<article>{\marginpar{\textsc{#1}}}}
+%</plan>
+%    \end{macrocode}
+%
+% \section{Worksheet}
+%
+%    \begin{macrocode}
+%<*worksheet>
+%    \end{macrocode} 
+% 
+%    \begin{macrocode}
+\RequirePackage[letterpaper]{geometry}
+\RequirePackage[twocolumn]{multicol}
+\RequirePackage{enumitem}
+\everymath={\displaystyle}
+\let\solution=\comment
+\let\endsolution=\endcomment
+\let\oldanswer=\answer
+\let\oldendanswer=\endanswer
+\let\answer=\comment
+\let\endanswer=\endcomment
+\RequirePackage{amsthm}
+\theoremstyle{remark}
+\newtheorem*{hint}{Hint} 
+\let\vfillifnosolutions=\vfill
+\let\workspace=\vfill
+\let\clearpageifnosolutions=\clearpage
+\let\wsclearpage=\clearpage
+\newcounter{problems}
+\newcommand{\theproblem}{{\upshape\bfseries\arabic{problems}.}}
+\newcommand{\problem}{\noindent\refstepcounter{problems}\theproblem\hspace{1em}\problemfont}
+\newenvironment{problems}
+{\begin{list}
+	{\refstepcounter{problems}\theproblem}{\problemfont}}
+{\end{list}}
+\newcommand{\problemfont}{\normalfont}
+\AtBeginDocument{\date{\ngelesson@term}}
+
+\ifthenelse{\boolean{worksheetsolutions}}{
+    \let\wstitle=\@title
+    \title{Solutions to \wstitle}
+    \renewenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+    %\let\answer=\oldanswer
+    %\let\endanswer=\oldendanswer
+    \renewenvironment{answer}{\begin{proof}[Answer]}{\end{proof}}
+    \let\vfillifnosolutions=\relax
+    \let\clearpageifnosolutions=\relax
+    \let\workspace=\relax
+    \let\wsclearpage=\relax
+    \renewcommand{\problemfont}{\normalfont\itshape}
+}{}
+%</worksheet>
+%    \end{macrocode}
+%
+% We're done!
+%    \begin{macrocode}
+%</classes>
+%    \end{macrocode}
+%\Finale
