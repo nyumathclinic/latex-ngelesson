@@ -57,6 +57,7 @@ and the derived files           ngelesson.ins,
 
 \endpostamble
 \usedir{tex/latex/ngelesson}
+\write18{sh ./vc}
 \generate{
   \file{\jobname slides.cls}{\from{\jobname.dtx}{classes,slides}}
   \file{\jobname handout.cls}{\from{\jobname.dtx}{classes,handout}}
@@ -75,6 +76,7 @@ and the derived files           ngelesson.ins,
 \generate{
   \file{README.txt}{\from{\jobname.dtx}{readme}}
 }
+\write18{mv README.txt README}
 \ifx\fmtname\nameofplainTeX
   \expandafter\endbatchfile
 \else
