@@ -6,4 +6,11 @@ ngelessonhandout.cls
 ngelessonplan.cls
 ngelessonslides.cls
 ngelessonworksheet.cls
+nglesson.pdf
+*.aux
+*.glo
+*.hd
+*.idx
+*.out
+
 
