@@ -513,6 +513,17 @@ and the derived files           ngelesson.ins,
 %
 % \subsection{Theorem-like environments}
 %
+% \begin{environment}{practice}
+% For student-centered examples.
+%    \begin{macrocode}
+%<*plan>
+\newtheorem{practice}[theorem]{Practice}
+%</plan>
+%    \end{macrocode}
+% \end{environment}
+
+
+%
 % \begin{environment}{answer}
 %    \begin{macrocode}
 \newenvironment{answer}{\begin{block}{Answer}}{\end{block}}
@@ -524,6 +535,31 @@ and the derived files           ngelesson.ins,
 \newenvironment{question}{\begin{exampleblock}{Question}}{\end{exampleblock}}
 %    \end{macrocode}
 % \end{environment}
+%
+% \begin{environment}{example}
+% Beamer's example environment numbers sequentially with the theorem.
+% I'd prefer separate enumeration
+%    \begin{macrocode}
+\let\example\relax
+\let\endexample\relax
+\RequirePackage{amsthm}
+\theoremstyle{example}
+\newtheorem{example}{Example}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{solution}
+% Beamer's solution environment numbers sequentially with the theorem.
+% I'd prefer it not be numbered at all.
+%    \begin{macrocode}
+\let\solution\relax
+\let\endsolution\relax
+\newtheorem*{solution}{Solution}
+%    \end{macrocode}
+% \end{environment}
+
+
+%
 %
 % \section{Handout layout}
 %
@@ -551,6 +587,29 @@ and the derived files           ngelesson.ins,
 %</plan>
 %    \end{macrocode}
 %
+% \begin{macro}{\notetoself}
+% Simple note to self.  Does it need to be guarded (i.e., disabled in presentation mode?)
+%    \begin{macrocode}
+\newcommand{\notetoself}[1]{\marginpar{#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Do}
+% \begin{macro}{\Say}
+% Colorful see/do environments as in RAPPS scripts
+%    \begin{macrocode}
+\definecolor{RAPPSBlue}{RGB}{54,95,145}
+\definecolor{RAPPSOrange}{RGB}{227,108,10}
+\newcommand{\Say}[1]{%
+	{Say: \bfseries\color{RAPPSBlue}``#1''}%
+}
+\newcommand{\Do}[1]{%
+	{\color{RAPPSOrange}\itshape (#1)}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+
 % \section{Worksheet}
 %
 %    \begin{macrocode}
