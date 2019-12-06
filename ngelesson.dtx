@@ -560,6 +560,22 @@ and the derived files           ngelesson.ins,
 \newtheorem*{solution}{Solution}
 %    \end{macrocode}
 % \end{environment}
+%
+% \begin{environment}{remark}
+\newtheorem{remark}{Remark}
+% \end{environment}
+% \begin{environment}{remarks}
+\newtheorem{remarks}{Remarks}
+% \end{environment}%
+% \begin{environment}{definition}
+% Definitions.
+%    \begin{macrocode}
+\let\definition\relax
+\let\enddefinition\relax
+\theoremstyle{definition}
+\newtheorem*{definition}{Definition}
+%    \end{macrocode}
+% \end{environment}
 
 
 %
