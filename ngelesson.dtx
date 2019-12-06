@@ -516,9 +516,13 @@ and the derived files           ngelesson.ins,
 % \begin{environment}{practice}
 % For student-centered examples.
 %    \begin{macrocode}
-%<*plan>
-\newtheorem{practice}[theorem]{Practice}
-%</plan>
+%<*plan|worksheet>
+\RequirePackage{amsthm}
+\theoremstyle{theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{practice}{\color{RAPPSOrange}Practice}
+\newtheorem*{problem*}{Problem}
+%</plan|worksheet>
 %    \end{macrocode}
 % \end{environment}
 
