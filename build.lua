@@ -35,8 +35,8 @@ function update_tag(file,content,tagname,tagdate)
     tagdate_tex = string.gsub(tagdate,'-','/')
     if string.match(file, "%.dtx$") then
         content = string.gsub(content,
-            "\n\\ProvidesPackage{(" .. module .. "%a+)}%[%d%d%d%d/%d%d/%d%d v.- ",
-            "\n\\ProvidesPackage{%1}[" .. tagdate_tex .. " " .. tagname .. " "
+            "\n%%<classes>%[%d%d%d%d/%d%d/%d%d v.- ",
+            "\n%%<classes>[" .. tagdate_tex .. " " .. tagname .. " "
     )
         content = string.gsub(content,
             "\n%% \\changes{unreleased}",
