@@ -132,7 +132,7 @@ and the derived files           ngelesson.ins,
 %
 %\maketitle
 %
-%%\changes{v1.0}{2009/10/06}{First public release}
+% \changes{v1.0.0}{2009/10/06}{First public release}
 %
 % \part*{Interface}
 %
@@ -581,17 +581,10 @@ and the derived files           ngelesson.ins,
 %
 %
 % \section{Handout layout}
-%
+% \changes{unreleased}{2020/02/19}{Removed some workaround code that stopped working}
 %    \begin{macrocode}
 %<*handout>
 \RequirePackage{handoutlayout}
-%    \end{macrocode}
-% Another XeTeX hack to get around a bug with pgfpages.
-% See \url{http://tex.stackexchange.com/q/3036/1402}
-%    \begin{macrocode}
-\renewcommand\pgfsetupphysicalpagesizes{%
-    \pdfpagewidth\pgfphysicalwidth\pdfpageheight\pgfphysicalheight%
-}
 \pgfpagesuselayout{3 on 1 with notes}[letterpaper]
 %</handout>
 %    \end{macrocode}
