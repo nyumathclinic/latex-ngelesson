@@ -1,0 +1,11 @@
+\input regression-test.tex
+\documentclass{ngelessonworksheet}
+\title[lesson number=1,textbook section=1]{Sample}
+\course[code=MATH-UA 120,section=006]{Discrete Mathematics}
+\date{March 12, 2020}
+\lessondescription{}
+\begin{document}
+\START
+\maketitle
+Hello, world!
+\end{document}

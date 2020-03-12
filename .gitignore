@@ -13,3 +13,10 @@ ngelesson.pdf
 *.idx
 *.out
 build
+testfiles/*.pdf
+testfiles/*.log
+testfiles/*.synctex.gz
+testfiles/*.fls
+testfiles/*.ttl
+testfiles/*.fdb_latexmk
+testfiles/*.dep
