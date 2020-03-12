@@ -20,3 +20,4 @@ testfiles/*.fls
 testfiles/*.ttl
 testfiles/*.fdb_latexmk
 testfiles/*.dep
+.DS_Store
