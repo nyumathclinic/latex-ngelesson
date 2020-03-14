@@ -1,0 +1,19 @@
+\input regression-test.tex
+\documentclass[solutions]{ngelessonworksheet}
+\title[lesson number=1,textbook section=1]{Sample}
+\course[code=MATH-UA 120,section=006]{Discrete Mathematics}
+\date{March 12, 2020}
+\lessondescription{}
+\definecolor{mypurple}{HTML}{57068C}
+\colorlet{solutions}{mypurple}
+\renewcommand{\solutioncolor}{\color{mypurple}}
+\begin{document}
+\START
+\maketitle
+Hello, world!
+
+\begin{problems}
+    \item 
+\end{problems}
+
+\end{document}
