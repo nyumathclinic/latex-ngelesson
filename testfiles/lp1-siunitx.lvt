@@ -1,0 +1,15 @@
+\input regression-test.tex
+\documentclass{ngelessonplan}
+\title[lesson number=1,textbook section=1]{Sample}
+\course[code=MATH-UA 120,section=006]{Discrete Mathematics}
+\date{March 12, 2020}
+\author{Matthew Leingang}
+\lessondescription{}
+\START
+\usepackage{siunitx}
+\OMIT
+\begin{document}
+\TIMO
+\maketitle
+Hello, world!
+\end{document}
