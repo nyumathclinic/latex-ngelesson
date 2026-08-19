@@ -24,6 +24,12 @@ typesetfiles = {"*.dtx"}
 -- This creates both "test.tlg" and "test.luatex.ltg" in testfiles.
 -- Engine-specific tlg files are only compared with the specific engines.
 
+-- print if the debug options is set
+function print_debug(s)
+    if options['debug'] then
+        print(s)
+    end
+end
 
 -- TAG FILES
 -- decorator to only run if repo is clean
