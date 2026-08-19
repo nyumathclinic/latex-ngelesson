@@ -31,6 +31,14 @@ function print_debug(s)
     end
 end
 
+-- run a shell command and return its trimmed output
+function os.capture(cmd)
+    local f = io.popen(cmd, 'r')
+    local s = f:read('*a')
+    f:close()
+    return s:gsub('%s+$', '')
+end
+
 -- TAG FILES
 -- decorator to only run if repo is clean
 function only_if_clean(f)
@@ -86,6 +94,7 @@ function bump_version(part)
     tagname = next_version(part)
     if options['dry-run'] then
         print("- l3build tag " .. tagname)
+        return 0
     else
         main("tag",{tagname})
     end
