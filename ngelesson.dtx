@@ -333,7 +333,7 @@ and the derived files           ngelesson.ins,
 \def\author{\@dblarg\beamer@author}
 \long\def\beamer@author[#1]#2{%
     % append course name/code/section
-    \def\ngelesson@authorprefix{
+    \def\ngelesson@authorprefix{%
         \ifx\ngelesson@course@code\@empty%
         \else%
             \ngelesson@course@code%
