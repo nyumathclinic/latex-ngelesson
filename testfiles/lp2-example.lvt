@@ -1,0 +1,14 @@
+\input regression-test.tex
+\documentclass{ngelessonplan}
+\title[lesson number=1,textbook section=1]{Sample}
+\course[code=MATH-UA 120,section=006]{Discrete Mathematics}
+\date{August 19, 2026}
+\author{Matthew Leingang}
+\lessondescription{}
+\begin{document}
+\START
+\maketitle
+\begin{example}
+Example content.
+\end{example}
+\end{document}

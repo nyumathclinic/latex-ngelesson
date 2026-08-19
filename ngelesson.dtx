@@ -545,9 +545,11 @@ and the derived files           ngelesson.ins,
 % \begin{environment}{example}
 % Beamer's example environment numbers sequentially with the theorem.
 % I'd prefer separate enumeration
+% \changes{unreleased}{2026/08/19}{Undefine the example counter if it exists}
 %    \begin{macrocode}
 \let\example\relax
 \let\endexample\relax
+\@ifundefined{c@example}{}{\let\c@example\relax\let\theexample\relax}
 \theoremstyle{example}
 \newtheorem{example}{Example}
 %    \end{macrocode}
