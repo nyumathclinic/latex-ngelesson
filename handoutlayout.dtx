@@ -92,6 +92,8 @@ and the derived files           handoutlayout.ins,
 % \maketitle
 %
 % \changes{v0.3}{2011/02/15}{Initial version (imported from loose texmf file)}
+% \changes{unreleased}{2026/11/23}{Header is one measured line; long titles
+%   shift or shrink instead of colliding with the author}
 %
 % \section{Introduction}
 %
@@ -101,6 +103,8 @@ and the derived files           handoutlayout.ins,
 % \item[\texttt{3 on 1 with notes}] three slides down the left column of a
 %   letter page, a ruled ``Notes'' area beside each, the author, short title,
 %   and date across the top, and the physical page number at the bottom right.
+%   The title is centered on the page when it fits; otherwise it sits between
+%   the author and the date, scaled down if necessary, so the three never collide.
 %   Options: \texttt{scale} (default 0.6).
 % \item[\texttt{NYU Open Ed margins}] one slide per $10\,\mathrm{in}\times
 %   7.5\,\mathrm{in}$ page, enlarged.
@@ -131,6 +135,13 @@ and the derived files           handoutlayout.ins,
     \newlength{\holo@handoutslidepage@x}
     \newlength{\holo@handoutnotepage@x}
     \newlength{\holo@handoutnotepage@width}
+    % scratch registers for measuring the page header
+    \newsavebox{\holo@lheadbox}
+    \newsavebox{\holo@cheadbox}
+    \newsavebox{\holo@rheadbox}
+    \newlength{\holo@headgap}
+    \newlength{\holo@headside}
+    \newlength{\holo@headavail}
 
     % defaults: letter paper, no border
     \def\pgfpageoptionheight{11in}
@@ -281,21 +292,53 @@ and the derived files           handoutlayout.ins,
         \hrule width \holo@handoutnotepage@width\vskip0.7cm
         \hrule width \holo@handoutnotepage@width}
       }
+      % The page header is one line, 7.5in wide (x = 0.5in to 8in):
+      % author on the left, short title, date on the right.  Measure
+      % all three so a long title can't run into the author or date.
+      %  - centered: the title fits centered on the page (as before);
+      %  - between:  the title fits between author and date;
+      %  - shrunk:   the title is scaled down to fit between them.
+      \sbox\holo@lheadbox{\beamer@shortauthor}%
+      \sbox\holo@rheadbox{\beamer@shortdate}%
+      \sbox\holo@cheadbox{\let\\:\beamer@shorttitle}%
+      \setlength\holo@headgap{1.5em}%
+      \setlength\holo@headside{\wd\holo@lheadbox}%
+      \ifdim\wd\holo@rheadbox>\holo@headside
+        \setlength\holo@headside{\wd\holo@rheadbox}%
+      \fi
+      \setlength\holo@headavail{%
+        \dimexpr 7.5in-2\holo@headside-2\holo@headgap\relax}%
+      \ifdim\wd\holo@cheadbox>\holo@headavail
+        \setlength\holo@headavail{\dimexpr 7.5in-\wd\holo@lheadbox
+          -\wd\holo@rheadbox-2\holo@headgap\relax}%
+        \ifdim\wd\holo@cheadbox>\holo@headavail
+          \def\holo@headcase{shrunk}%
+          \sbox\holo@cheadbox{%
+            \resizebox{\holo@headavail}{!}{\usebox\holo@cheadbox}}%
+        \else
+          \def\holo@headcase{between}%
+        \fi
+        \def\holo@headline{\usebox\holo@lheadbox
+          \hskip\holo@headgap\hfil\usebox\holo@cheadbox
+          \hskip\holo@headgap\hfil\usebox\holo@rheadbox}%
+      \else
+        \def\holo@headcase{centered}%
+        \def\holo@headline{\rlap{\usebox\holo@lheadbox}\hfil
+          \usebox\holo@cheadbox\hfil\llap{\usebox\holo@rheadbox}}%
+      \fi
+      \typeout{handoutlayout: header title \holo@headcase}%
       \newbox\cheadbox
-      \setbox\cheadbox=\vbox{\parskip=0pt%\hsize=6.5in% size wanted minus one inch?
-        \vskip-1in\hskip-1in\let\\:
-        \hbox to \hsize{\hfill\beamer@shorttitle}}
-      \newbox\lheadbox
-      \setbox\lheadbox=\vbox{\parskip=0pt\vskip-1in\hskip-0.5in\beamer@shortauthor}
-      \newbox\rheadbox
-      \setbox\rheadbox=\vbox{\parskip=0pt\vskip-1in\hskip-1in\hbox to 2.5in{\hfill\beamer@shortdate}}
+      \setbox\cheadbox=\vbox{\parskip=0pt\vskip-1in
+        \moveleft1in\hbox to 7.5in{\holo@headline}}
       \pgfpagesshipoutlogicalpage{4}\copy\notesbox
       \pgfpagesshipoutlogicalpage{5}\copy\notesbox
       \pgfpagesshipoutlogicalpage{6}\copy\notesbox
       \pgfpagesshipoutlogicalpage{7}\vbox{}
       \pgfpagesshipoutlogicalpage{8}\copy\cheadbox
-      \pgfpagesshipoutlogicalpage{9}\copy\lheadbox
-      \pgfpagesshipoutlogicalpage{10}\copy\rheadbox
+      % logical pages 9 and 10 used to hold the author and date;
+      % they're kept (empty) so the page count stays the same
+      \pgfpagesshipoutlogicalpage{9}\vbox{}
+      \pgfpagesshipoutlogicalpage{10}\vbox{}
     }
 }% end of the "3 on 1 with notes layout"
 

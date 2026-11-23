@@ -1,0 +1,13 @@
+\input regression-test.tex
+\documentclass{ngelessonhandout}
+\title[lesson number=19,textbook section={25}]{The Pigeonhole Principle}
+\course[code=MATH-UA 120,section=016]{Discrete Mathematics}
+\author{Prof. Leingang}
+\date{November 24, 2026}
+\lessondescription{}
+\begin{document}
+\START
+\makeatletter
+\TYPE{header title: \holo@headcase}
+\makeatother
+\END
