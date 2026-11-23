@@ -1,0 +1,316 @@
+% \iffalse meta-comment
+% !TEX program  = pdfLaTeX
+%<*internal>
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+----------------------------------------------------------------
+handoutlayout: pgfpages layouts for the NGE Lesson Bundle handouts
+E-mail: leingang@courant.nyu.edu
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+
+\endpreamble
+\postamble
+
+Copyright (C) 2011 by Matthew Leingang <leingang@courant.nyu.edu>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+You.
+
+This work consists of the file  handoutlayout.dtx
+and the derived files           handoutlayout.ins,
+                                handoutlayout.pdf, and
+                                handoutlayout.sty
+
+\endpostamble
+\usedir{tex/latex/ngelesson}
+\generate{
+  \file{\jobname.sty}{\from{\jobname.dtx}{package}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/ngelesson}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+%<*package>
+\ProvidesPackage{handoutlayout}
+  [2026/11/23 v0.3 MPL]
+%</package>
+%<*driver>
+\documentclass{ltxdoc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage[numbered]{hypdoc}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\newcommand{\cls}[1]{\textsf{#1}}
+\newcommand{\pkg}[1]{\textsf{#1}}
+\begin{document}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \def\fileversion{v0.3}
+% \def\filedate{2026/11/23}
+%
+% \title{^^A
+%   The \textsf{handoutlayout} package\thanks{^^A
+%    This file describes version \fileversion, last revised \filedate.^^A
+%  }^^A
+%}
+% \author{^^A
+%   Matthew Leingang\thanks{E-mail: leingang@courant.nyu.edu}^^A
+% }
+% \date{Released \filedate}
+%
+% \maketitle
+%
+% \changes{v0.3}{2011/02/15}{Initial version (imported from loose texmf file)}
+%
+% \section{Introduction}
+%
+% This package declares \pkg{pgfpages} layouts used by the
+% \cls{ngelessonhandout} class:
+% \begin{description}
+% \item[\texttt{3 on 1 with notes}] three slides down the left column of a
+%   letter page, a ruled ``Notes'' area beside each, the author, short title,
+%   and date across the top, and the physical page number at the bottom right.
+%   Options: \texttt{scale} (default 0.6).
+% \item[\texttt{NYU Open Ed margins}] one slide per $10\,\mathrm{in}\times
+%   7.5\,\mathrm{in}$ page, enlarged.
+% \end{description}
+%
+% \StopEventually{\PrintChanges\PrintIndex}
+%
+% \section{Implementation}
+%
+%    \begin{macrocode}
+%<*package>
+\RequirePackage{pgfpages}
+
+\define@key{pgfpagesuselayoutoption}{scale}{
+    \def\holo@handoutpagescale{#1}
+}
+
+%%  3 slides in left column
+%%  notes in right column
+%%  metadata in top/bottom footer.
+%%  (link to Guido van Diepen's blog)
+%%: TODO adjust to paper size and to slide size
+\pgfpagesdeclarelayout{3 on 1 with notes} {
+    % this is to count physical pages.  The
+    % manual talks about some aux-file trickery instead but this works.
+    \newcounter{physicalpage}
+    \newlength{\noteswidth}
+    \newlength{\holo@handoutslidepage@x}
+    \newlength{\holo@handoutnotepage@x}
+    \newlength{\holo@handoutnotepage@width}
+
+    % defaults: letter paper, no border
+    \def\pgfpageoptionheight{11in}
+    \def\pgfpageoptionwidth{8.5in}
+    \def\pgfpageoptionborder{0pt}
+    \def\holo@handoutpagescale{0.6}
+    \def\holo@handoutleftmargin{0.5in}
+    \def\holo@handoutrightmargin{0.5in}
+    \def\holo@handoutcolsep{0.5in}
+    % optional key=val arguments after \pgfpagesuselayout{3 on 1 with notes}[key=val]
+    % will get processed next.  We may assume that they are called as in
+    % \setkeys{pgfpagesuselayoutoption}{<opts>}
+}
+{
+    \pgfmathsetlength{\holo@handoutslidepage@x}{
+            \holo@handoutleftmargin
+        + \holo@handoutpagescale * \beamer@paperwidth * 0.5
+    }
+    \pgfmathsetlength{\holo@handoutnotepage@width}{
+        \pgfpageoptionwidth
+        - \holo@handoutrightmargin
+        - \holo@handoutleftmargin
+        - \holo@handoutcolsep
+        - \holo@handoutpagescale * \beamer@paperwidth
+    }
+    \pgfmathsetlength{\holo@handoutnotepage@x}{
+            0.5 * ((\holo@handoutleftmargin
+                 + \holo@handoutpagescale * \beamer@paperwidth + \holo@handoutcolsep)
+              +(\pgfpageoptionwidth - \holo@handoutrightmargin))
+    }
+%%    \showthe\holo@handoutnotepage@width
+    \pgfpagesphysicalpageoptions
+    {%
+      logical pages=10,%
+      physical height=\pgfpageoptionheight,%
+      physical width=\pgfpageoptionwidth,%
+      last logical shipout=3%
+    }
+    % logical pages 1, 2, and 3 are slide pages
+    \pgfpageslogicalpageoptions{1}
+    {%
+        scale=\holo@handoutpagescale,
+        border shrink=\pgfpageoptionborder,%
+        border code={\stepcounter{physicalpage}\pgfstroke},
+        center=\pgfpoint{\holo@handoutslidepage@x}{.80\pgfphysicalheight}%
+    }%
+
+    \pgfpageslogicalpageoptions{2}
+    {%
+        scale=\holo@handoutpagescale,
+        border code={\pgfstroke},
+        center=\pgfpoint{\holo@handoutslidepage@x}{.50\pgfphysicalheight}%
+    }%
+    \pgfpageslogicalpageoptions{3}
+    {%
+        scale=\holo@handoutpagescale,
+        border code={\pgfstroke},
+        center=\pgfpoint{\holo@handoutslidepage@x}{.20\pgfphysicalheight}%
+    }%
+
+    % logical pages 4, 5, and 6 are notes pages
+    \pgfpageslogicalpageoptions{4}
+    {%
+        border shrink=\pgfpageoptionborder,%
+        original width=9cm,
+        original height=6.3cm,
+        center=\pgfpoint{\holo@handoutnotepage@x}{.80\pgfphysicalheight},%
+%%        border code={\pgfstroke},
+        copy from=4
+    }%
+
+    \pgfpageslogicalpageoptions{5}
+    {%
+        border shrink=\pgfpageoptionborder,%
+        original width=9cm,
+        original height=6.3cm,
+        center=\pgfpoint{\holo@handoutnotepage@x}{.50\pgfphysicalheight},%
+        copy from=5
+    }%
+    \pgfpageslogicalpageoptions{6}
+    {%
+        border shrink=\pgfpageoptionborder,%
+        original width=9cm,
+        original height=6.3cm,
+        center=\pgfpoint{\holo@handoutnotepage@x}{.20\pgfphysicalheight},%
+        copy from=6
+    }%
+
+
+    % page footer - page number in bottom right
+    \pgfpageslogicalpageoptions{7}
+    {
+        center=\pgfpoint{\pgfphysicalwidth-0.5in}{0.5in},
+        original width=3em,
+        original height=1em,
+        copy from=7,
+        border code={
+            \pgfusepath{discard}
+            \pgftext[at=\pgfpoint{0.5\wd0}{0.5\ht0}]{\thephysicalpage}
+        }
+    }
+
+    % document title in center of page header
+    \pgfpageslogicalpageoptions{8}
+    {
+        original height=1em,
+        original width=7.5in,
+        center=\pgfpoint{0.5\pgfphysicalwidth}{\pgfphysicalheight-0.5in},
+        border code={\pgfusepath{discard}},
+        copy from=8
+    }
+
+    % author on left of page header
+    \pgfpageslogicalpageoptions{9}
+    {
+        original height=1em,
+        original width=3in,
+        center=\pgfpoint{1.5in}{\pgfphysicalheight-0.5in},
+        border code={\pgfusepath{discard}},
+        copy from=9
+    }
+
+    % date on right of page header
+    \pgfpageslogicalpageoptions{10}
+    {
+        original height=1em,
+        original width=3in,
+        center=\pgfpoint{7in}{\pgfphysicalheight-0.5in},
+        border code={\pgfusepath{discard}},
+        copy from=10
+    }
+
+
+\AtBeginDocument{
+    % the boxes are built from paragraphs; the beamer theme's \parskip
+    % would push them down
+    \newbox\notesbox
+    \setbox\notesbox=\vbox{\parskip=0pt
+        \hsize=\paperwidth
+        \vskip-1in\hskip-1in\vbox{
+            \vskip0.5cm
+                Notes\vskip0.7cm
+        \hrule width \holo@handoutnotepage@width\vskip0.7cm
+        \hrule width \holo@handoutnotepage@width\vskip0.7cm
+        \hrule width \holo@handoutnotepage@width\vskip0.7cm
+        \hrule width \holo@handoutnotepage@width\vskip0.7cm
+        \hrule width \holo@handoutnotepage@width\vskip0.7cm
+        \hrule width \holo@handoutnotepage@width\vskip0.7cm
+        \hrule width \holo@handoutnotepage@width}
+      }
+      \newbox\cheadbox
+      \setbox\cheadbox=\vbox{\parskip=0pt%\hsize=6.5in% size wanted minus one inch?
+        \vskip-1in\hskip-1in\let\\:
+        \hbox to \hsize{\hfill\beamer@shorttitle}}
+      \newbox\lheadbox
+      \setbox\lheadbox=\vbox{\parskip=0pt\vskip-1in\hskip-0.5in\beamer@shortauthor}
+      \newbox\rheadbox
+      \setbox\rheadbox=\vbox{\parskip=0pt\vskip-1in\hskip-1in\hbox to 2.5in{\hfill\beamer@shortdate}}
+      \pgfpagesshipoutlogicalpage{4}\copy\notesbox
+      \pgfpagesshipoutlogicalpage{5}\copy\notesbox
+      \pgfpagesshipoutlogicalpage{6}\copy\notesbox
+      \pgfpagesshipoutlogicalpage{7}\vbox{}
+      \pgfpagesshipoutlogicalpage{8}\copy\cheadbox
+      \pgfpagesshipoutlogicalpage{9}\copy\lheadbox
+      \pgfpagesshipoutlogicalpage{10}\copy\rheadbox
+    }
+}% end of the "3 on 1 with notes layout"
+
+\pgfpagesdeclarelayout{NYU Open Ed margins}{}{%
+    \pgfpagesphysicalpageoptions{%
+        logical pages=1,%
+        physical height=7.5in,
+        physical width=10in
+    }
+    \pgfpageslogicalpageoptions{1}{%
+            scale=1.27,
+        center=\pgfpoint{5in}{4.25in}
+    }
+}
+%</package>
+%    \end{macrocode}
+%
+% \Finale

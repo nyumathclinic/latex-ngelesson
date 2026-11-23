@@ -21,3 +21,6 @@ testfiles/*.ttl
 testfiles/*.fdb_latexmk
 testfiles/*.dep
 .DS_Store
+handoutlayout.ins
+handoutlayout.sty
+handoutlayout.pdf
