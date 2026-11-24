@@ -584,6 +584,41 @@ and the derived files           ngelesson.ins,
 
 
 %
+% \section{Images}
+%
+% \changes{unreleased}{2026/11/24}{Added the \texttt{fit} key for \cs{includegraphics}}
+% The \texttt{fit} key for \cs{includegraphics} scales an image to be as
+% large as possible inside a box, keeping its aspect ratio.  The box depends
+% on the output.  On slides and handouts it is the current line width (the
+% column width inside a \texttt{column}) by $0.8$ of the text height.  In the
+% lesson plan and worksheet it is $0.618$ of the line width by half the text
+% height, which suits a floating \texttt{figure} with a caption.
+% Keys given after \texttt{fit} override it, as in
+% \verb|\includegraphics[fit,height=0.6\textheight]{file}|.
+%
+% \begin{macro}{\setfitwidth}
+% \begin{macro}{\setfitheight}
+% Change the box for the rest of the current group.
+%    \begin{macrocode}
+%<*slides|handout>
+\newcommand*{\ngelesson@fitwidth}{\linewidth}
+\newcommand*{\ngelesson@fitheight}{0.8\textheight}
+%</slides|handout>
+%<*plan|worksheet>
+\newcommand*{\ngelesson@fitwidth}{0.618\linewidth}
+\newcommand*{\ngelesson@fitheight}{0.5\textheight}
+%</plan|worksheet>
+\newcommand*{\setfitwidth}[1]{\renewcommand*{\ngelesson@fitwidth}{#1}}
+\newcommand*{\setfitheight}[1]{\renewcommand*{\ngelesson@fitheight}{#1}}
+\define@key{Gin}{fit}[]{%
+  \setkeys{Gin}{%
+    width=\ngelesson@fitwidth,
+    height=\ngelesson@fitheight,
+    keepaspectratio}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
 %
 % \section{Handout layout}
 % \changes{v2.0.0}{2020/02/19}{Removed some workaround code that stopped working}
